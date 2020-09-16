@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
+﻿using Bangazon.Data;
+using Bangazon.Models;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Bangazon.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Bangazon.Models;
 using Microsoft.Extensions.Hosting;
 
 namespace Bangazon
@@ -30,7 +30,7 @@ namespace Bangazon
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI();
 
-            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddControllersWithViews();
             services.AddRazorPages();
         }
 
