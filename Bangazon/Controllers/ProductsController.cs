@@ -17,11 +17,22 @@ namespace Bangazon.Controllers
             _context = context;
         }
 
+        [BindProperty(SupportsGet = true)]
+        public string SearchString { get; set; }
+        // Requires using Microsoft.AspNetCore.Mvc.Rendering;
+
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SearchString)
         {
-            var applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User);
-            return View(await applicationDbContext.ToListAsync());
+            var applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User).ToList();
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                SearchString = SearchString.ToLower();
+                applicationDbContext = applicationDbContext.Where(s => s.Title.ToLower().Contains(SearchString)).ToList();
+            }
+
+            //Movie = await products.ToListAsync();
+            return View(applicationDbContext);
         }
 
         // GET: Products/Details/5
