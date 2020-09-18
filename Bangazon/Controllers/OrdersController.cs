@@ -173,25 +173,54 @@ namespace Bangazon.Controllers
             var user = await GetCurrentUserAsync();
             var order = _context.Order.Where(o => o.UserId == user.Id && o.PaymentType == null).ToList();
 
-            OrderProduct orderProduct = new OrderProduct()
-            {
-                OrderId = order[0].OrderId,
-                ProductId = id
-            };
 
-            if (ModelState.IsValid)
+            if (order.Count != 0)
             {
-                _context.Add(orderProduct);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+
+                OrderProduct orderProduct = new OrderProduct()
+                {
+                    OrderId = order[0].OrderId,
+                    ProductId = id
+                };
+
+                if (ModelState.IsValid)
+                {
+                    _context.Add(orderProduct);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
 
+            else
+            {
+                Order neworder = new Order()
+                {
+                    UserId = user.Id,
+                    User = user
+                };
+                if (ModelState.IsValid)
+                {
+                    
+                    _context.Add(neworder);
+                    await _context.SaveChangesAsync();
 
+                    order = _context.Order.Where(o => o.UserId == user.Id && o.PaymentType == null).ToList();
+                    OrderProduct orderProduct = new OrderProduct()
+                    {
+                        OrderId = order[0].OrderId,
+                        ProductId = id
+                    };
 
-            return View();
+                    _context.Add(orderProduct);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+            return RedirectToAction("Details", "Products", new {id = id });
         }
       }
 }
 
 
-//Google .Where for Add to Cart to method
