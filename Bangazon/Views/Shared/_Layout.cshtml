@@ -49,14 +49,15 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-            <form class="form-inline my-2 my-lg-0">
-                <input asp-controller="Products" asp-action="Index" name="SearchString" class="form-control mr-sm-2" aria-label="Search" placeholder="Search">
-                <button class="btn btn-primary my-2 my-sm-0" asp-area="" asp-controller="Products" asp-action="Index" type="submit">Search</button>
-            </form>}
-
                     </ul>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+        <form class="form-inline my-2 my-lg-0">
+            <input asp-controller="Products" asp-action="Index" name="SearchString" class="form-control mr-sm-2" aria-label="Search" placeholder="Search">
+            <button class="btn btn-primary my-2 my-sm-0" asp-area="" asp-controller="Products" asp-action="Index" type="submit">Search</button>
+        </form>}
+
+
                 </div>
             </div>
         </nav>

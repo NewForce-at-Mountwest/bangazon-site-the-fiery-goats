@@ -14,6 +14,7 @@ namespace Bangazon.Controllers
 
         public ProductsController(ApplicationDbContext context)
         {
+
             _context = context;
         }
 
