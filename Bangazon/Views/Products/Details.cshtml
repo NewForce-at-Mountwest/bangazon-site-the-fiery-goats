@@ -72,7 +72,9 @@
         </dd>
     </dl>
 </div>
-<div>
+<a asp-action="AddToCart" asp-controller="Orders" asp-route-id="@Model.ProductId"><button type="submit">Add To Cart</button></a> 
+    
+      
     <a asp-action="Edit" asp-route-id="@Model.ProductId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

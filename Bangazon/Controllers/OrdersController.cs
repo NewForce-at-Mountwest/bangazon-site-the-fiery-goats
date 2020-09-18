@@ -1,5 +1,6 @@
 ﻿using Bangazon.Data;
 using Bangazon.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +13,15 @@ namespace Bangazon.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public OrdersController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public OrdersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
 
         // GET: Orders
         public async Task<IActionResult> Index()
@@ -160,5 +166,61 @@ namespace Bangazon.Controllers
         {
             return _context.Order.Any(e => e.OrderId == id);
         }
-    }
+
+
+        public async Task<IActionResult> AddToCart(int id)
+        {
+            var user = await GetCurrentUserAsync();
+            var order = _context.Order.Where(o => o.UserId == user.Id && o.PaymentType == null).ToList();
+
+
+            if (order.Count != 0)
+            {
+
+
+                OrderProduct orderProduct = new OrderProduct()
+                {
+                    OrderId = order[0].OrderId,
+                    ProductId = id
+                };
+
+                if (ModelState.IsValid)
+                {
+                    _context.Add(orderProduct);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+            else
+            {
+                Order neworder = new Order()
+                {
+                    UserId = user.Id,
+                    User = user
+                };
+                if (ModelState.IsValid)
+                {
+                    
+                    _context.Add(neworder);
+                    await _context.SaveChangesAsync();
+
+                    order = _context.Order.Where(o => o.UserId == user.Id && o.PaymentType == null).ToList();
+                    OrderProduct orderProduct = new OrderProduct()
+                    {
+                        OrderId = order[0].OrderId,
+                        ProductId = id
+                    };
+
+                    _context.Add(orderProduct);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+            return RedirectToAction("Details", "Products", new {id = id });
+        }
+      }
 }
+
+

@@ -1,5 +1,7 @@
 ﻿using Bangazon.Data;
 using Bangazon.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +13,14 @@ namespace Bangazon.Controllers
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public ProductsController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public ProductsController(ApplicationDbContext ctx,
+                          UserManager<ApplicationUser> userManager)
         {
-
-            _context = context;
+            _userManager = userManager;
+            _context = ctx;
         }
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         [BindProperty(SupportsGet = true)]
         public string SearchString { get; set; }
@@ -47,7 +51,10 @@ namespace Bangazon.Controllers
             var product = await _context.Product
                 .Include(p => p.ProductType)
                 .Include(p => p.User)
+                .Include(p => p.OrderProducts)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
+
+            product.Quantity -= product.OrderProducts.Count();
             if (product == null)
             {
                 return NotFound();
@@ -57,6 +64,7 @@ namespace Bangazon.Controllers
         }
 
         // GET: Products/Create
+        [Authorize]
         public IActionResult Create()
         {
             ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label");
@@ -71,9 +79,15 @@ namespace Bangazon.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductId,DateCreated,Description,Title,Price,Quantity,UserId,City,ImagePath,Active,ProductTypeId")] Product product)
         {
+            ModelState.Remove("User");
+            ModelState.Remove("UserId");
             if (ModelState.IsValid)
+
             {
+                var user = await GetCurrentUserAsync();
+                product.UserId = user.Id;
                 _context.Add(product);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
