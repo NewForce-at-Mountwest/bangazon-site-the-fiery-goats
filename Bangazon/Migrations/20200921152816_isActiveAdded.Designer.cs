@@ -4,14 +4,16 @@ using Bangazon.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Bangazon.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200921152816_isActiveAdded")]
+    partial class isActiveAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -274,9 +276,6 @@ namespace Bangazon.Migrations
                     b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("LocalPickup")
-                        .HasColumnType("bit");
-
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
@@ -310,7 +309,6 @@ namespace Bangazon.Migrations
                             Active = true,
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "It flies high",
-                            LocalPickup = false,
                             Price = 2.9900000000000002,
                             ProductTypeId = 1,
                             Quantity = 100,
@@ -323,7 +321,6 @@ namespace Bangazon.Migrations
                             Active = true,
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "It rolls fast",
-                            LocalPickup = false,
                             Price = 29.989999999999998,
                             ProductTypeId = 2,
                             Quantity = 5,
@@ -336,7 +333,6 @@ namespace Bangazon.Migrations
                             Active = true,
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "It cuts things",
-                            LocalPickup = false,
                             Price = 31.489999999999998,
                             ProductTypeId = 3,
                             Quantity = 18,
@@ -349,7 +345,6 @@ namespace Bangazon.Migrations
                             Active = true,
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "It puts holes in things",
-                            LocalPickup = false,
                             Price = 24.890000000000001,
                             ProductTypeId = 3,
                             Quantity = 12,
@@ -362,7 +357,6 @@ namespace Bangazon.Migrations
                             Active = true,
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "It puts things together",
-                            LocalPickup = false,
                             Price = 22.690000000000001,
                             ProductTypeId = 3,
                             Quantity = 32,

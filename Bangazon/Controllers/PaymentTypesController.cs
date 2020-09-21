@@ -72,6 +72,7 @@ namespace Bangazon.Controllers
             {
                 var user = await GetCurrentUserAsync();
                 paymentType.UserId = user.Id;
+                paymentType.IsActive = true;
                 ModelState.Remove("paymentType.User");
                 _context.Add(paymentType);
                 await _context.SaveChangesAsync();
@@ -156,13 +157,26 @@ namespace Bangazon.Controllers
         // POST: PaymentTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+
+
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var paymentType = await _context.PaymentType.FindAsync(id);
-            _context.PaymentType.Remove(paymentType);
-            await _context.SaveChangesAsync();
+
+            PaymentType paymentType = await _context.PaymentType.FindAsync(id);
+            try
+            {
+                _context.PaymentType.Remove(paymentType);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception) when (paymentType.IsActive == true)
+            {
+                paymentType.IsActive = false;
+                _context.Update(paymentType);
+                await _context.SaveChangesAsync();
+            }
             return RedirectToAction(nameof(Index));
         }
+        
 
         private bool PaymentTypeExists(int id)
         {
