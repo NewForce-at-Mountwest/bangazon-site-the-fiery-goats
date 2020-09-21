@@ -4,14 +4,16 @@ using Bangazon.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Bangazon.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200918175133_AddingLocalPickup")]
+    partial class AddingLocalPickup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,7 +102,7 @@ namespace Bangazon.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "395b3353-0cf7-4ba1-9163-92432b27b5c3",
+                            ConcurrencyStamp = "71758d9a-4223-483c-8237-662d354c7994",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Admina",
@@ -108,7 +110,7 @@ namespace Bangazon.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEF8OZXOkeloP/kfaHeRY/l1N0fypaBcrK0u9s1sP1gGkD5tT02sIPKE8aRmDXULZTQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOfC7Y/T7vpHkQeWaPtjF3/M5BfYPqTzUeKmFh2b6nPLicpbkl437jKVsCuCI2/SGA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             StreetAddress = "123 Infinity Way",
@@ -214,9 +216,6 @@ namespace Bangazon.Migrations
                         .HasColumnType("nvarchar(55)")
                         .HasMaxLength(55);
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -234,7 +233,6 @@ namespace Bangazon.Migrations
                             AccountNumber = "86753095551212",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "American Express",
-                            IsActive = false,
                             UserId = "00000000-ffff-ffff-ffff-ffffffffffff"
                         },
                         new
@@ -243,7 +241,6 @@ namespace Bangazon.Migrations
                             AccountNumber = "4102948572991",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Discover",
-                            IsActive = false,
                             UserId = "00000000-ffff-ffff-ffff-ffffffffffff"
                         });
                 });

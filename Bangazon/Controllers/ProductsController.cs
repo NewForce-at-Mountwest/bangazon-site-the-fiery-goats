@@ -51,7 +51,10 @@ namespace Bangazon.Controllers
             var product = await _context.Product
                 .Include(p => p.ProductType)
                 .Include(p => p.User)
+                .Include(p => p.OrderProducts)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
+
+            product.Quantity -= product.OrderProducts.Count();
             if (product == null)
             {
                 return NotFound();
@@ -74,7 +77,7 @@ namespace Bangazon.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,DateCreated,Description,Title,Price,Quantity,UserId,City,ImagePath,Active,ProductTypeId")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,DateCreated,Description,Title,Price,Quantity,UserId,City,ImagePath,Active,ProductTypeId,LocalPickup")] Product product)
         {
             ModelState.Remove("User");
             ModelState.Remove("UserId");
